@@ -59,11 +59,7 @@ Prices will undoubtedly change:
 | €2.08	MAX7219 Red Dot Matrix Module - http://www.banggood.com/5Pcs-MAX7219-Dot-Matrix-Module-MCU-LED-Control-Module-Kit-For-Arduino-p-1031709.html |
 | €0.80/4 | Batteries | |
 | €0.56 | Slide Switch | http://nl.farnell.com/c-k-components/os102011ma1qn1/switch-spdt-0-1a-12v-pcb-r-a/dp/1201431?CMP=i-bf9f-00001000 - I've since seen cheaper slide switches - such as http://www.banggood.com/20PCS-Black-Mini-Size-SPDT-Slide-Switches-On-Off-PCB-5V-0_3A-DIY-Material-p-1009183.html |
-| €1.73 | Battery Contacts 3x€.41 .21 .24 | 
-		http://nl.farnell.com/keystone/5212/battery-dual-contact-a-aa/dp/1650703?CMP=i-bf9f-00001000
-		http://nl.farnell.com/keystone/5224/battery-pos-a-aa/dp/1650704?CMP=i-bf9f-00001000
-		http://nl.farnell.com/keystone/5201/battery-holder-a-aa-1way/dp/1339845?CMP=i-bf9f-00001000
-|
+| €1.73 | Battery Contacts 3x€.41 .21 .24 | http://nl.farnell.com/keystone/5212/battery-dual-contact-a-aa/dp/1650703?CMP=i-bf9f-00001000 http://nl.farnell.com/keystone/5224/battery-pos-a-aa/dp/1650704?CMP=i-bf9f-00001000 http://nl.farnell.com/keystone/5201/battery-holder-a-aa-1way/dp/1339845?CMP=i-bf9f-00001000 |
 | €0.76/2 | Microswitches | http://nl.farnell.com/multicomp/dm1-01p-30-3/microswitch-spdt-1a-short-lever/dp/1735364?CMP=i-bf9f-00001000 |
 | €1.44 | PLA for Case | |
 | €0.10 | Wire | |
