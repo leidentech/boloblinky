@@ -44,6 +44,7 @@ boolean modeFlag=false; //First time through flag
 int longPressInterval=60; //The lower the debounce, the higher this must be
 int debounce=10;
 int mode=1;  //set this to whatever the default should be on start
+String lang="eng";
 
 int wait = 50; // In milliseconds
 
@@ -121,7 +122,11 @@ void setup() {
 	randomSeed(analogRead(0));
 	//init
 	transition();
-	msgBoard("Ready");
+	if ( lang == "dut" ) {
+		msgBoard("Klaar");
+	} else {
+		msgBoard("Ready");
+	}
 	Serial.setTimeout(1);
 }
 
@@ -141,7 +146,7 @@ void loop() {
 		transition();
 		mode++;
 		modeFlag=true;
-		if (mode > 5) {
+		if (mode > 6) {
 			mode=0;
 		}
 		inGame=false;
@@ -150,7 +155,7 @@ void loop() {
 		mode--;
 		modeFlag=true;
 		if (mode < 0) {
-			mode=5;
+			mode=6;
 		}
 		inGame=false;
 	}
@@ -242,7 +247,7 @@ void loop() {
 		case 5:
 			if (isBlank()) { //Skip display if stored image is blank - shouldn't be followed by something that uses modeFlag because that will get stripped here if blank.
 				if (leftLongPress) {
-					mode=0;
+					mode++;
 				} else {
 					mode--;
 				}
@@ -256,6 +261,11 @@ void loop() {
 					setRow(0,s,screen[s]);
 				} 
 				matrix.write();
+			}
+			break;
+		case 6:
+			if (!modeFlag && leftPress || rightPress) {
+				timer();
 			}
 			break;
 		default: //should never get here
@@ -312,6 +322,24 @@ void transition()
 	matrix.fillScreen(HIGH);
 	matrix.write();
 	delay(500);
+	matrix.fillScreen(LOW);
+	matrix.write();
+}
+void timer()
+{ //1-minute timer... every second lights up another pixel
+	matrix.fillScreen(LOW);
+	matrix.write();
+	matrix.setRotation(1);
+	setRow(0, 7, 15); //64 pixels but 60 seconds - lets preload the last 4
+	int x;
+	int y;
+	for ( int cursorIndex = 0 ; cursorIndex <= 59; cursorIndex++ ) {  //Once countdown starts, no way to break out, that's maybe annoying
+		x = round(cursorIndex / 8);
+		y = 7 - (cursorIndex % 8);
+		matrix.drawPixel(x, y, HIGH);
+		matrix.write();
+		delay(1000);
+	}
 	matrix.fillScreen(LOW);
 	matrix.write();
 }
@@ -379,6 +407,7 @@ void sequence()
 { //Doesn't have to be a die - could be any animation
 	int i=0;
 	int index;
+  
 	byte numbers[48]={ //This for nice numbers - not used
 		B00011000,
 		B00111000,
@@ -429,6 +458,7 @@ void sequence()
 		B00111100,
 		B00000000
 	};
+  
 	byte pips[48]={
 		B00000000,
 		B00000000,
@@ -511,32 +541,61 @@ void setRow(int addr, int row, byte rowValue)
 }
 
 void magic8ball()
-{ 
-	String engAnswer[20]={
-		"It is certain",
-		"It is decidedly so",
-		"Without a doubt",
-		"Yes, definitely",
-		"You may rely on it",
-		"As I see it, yes",
-		"Most likely",
-		"Outlook good",
-		"Yes",
-		"Signs point to yes",
-		"Reply hazy try again",
-		"Ask again later",
-		"Better not tell you now",
-		"Cannot predict now",
-		"Concentrate and ask again",
-		"Don't count on it",
-		"My reply is no",
-		"My sources say no",
-		"Outlook not so good",
-		"Very doubtful"
-	};
-
+{ //Arduinos apparently really, really don't like arrays of strings - without the F macro to tell it to keep your strings in PROGMEM the global variables in the sketch go above 60% dynamic memory and random bad things happened
 	randNumber = random(20);
-	msgBoard(engAnswer[randNumber]);
+    
+	if ( lang == "dut" ) {     
+		String dutAnswer[20]={
+			F("Het is zeker"),
+			F("Het is beslist zo"),
+			F("Zonder twijfel"),
+			F("Zeer zeker"),
+			F("Je kunt erop vertrouwen"),
+			F("Volgens mij wel"),
+			F("Zeer waarschijnlijk"),
+			F("Goed vooruitzicht"),
+			F("Ja"),
+			F("Tekenen wijzen op ja"),
+			F("Reactie is wazig, probeer opnieuw"),
+			F("Vraag later opnieuw"),
+			F("Beter je nu niet te zeggen"),
+			F("Niet nu te voorspellen"),
+			F("Concentreer en vraag opnieuw"),
+			F("Reken er niet op"),
+			F("Mijn antwoord is nee"),
+			F("Mijn bronnen"),
+			F("Vooruitzicht is niet zo goed"),
+			F("Zeer twijfelachtig")
+		};
+		//Serial.print("Dutch randNumber: ");Serial.print(randNumber);Serial.print(" answer: ");Serial.println(dutAnswer[randNumber]);
+		msgBoard(dutAnswer[randNumber]);  
+	} else {
+		String engAnswer[20]={
+			F("It is certain"),
+			F("It is decidedly so"),
+			F("Without a doubt"),
+			F("Yes, definitely"),
+			F("You may rely on it"),
+			F("As I see it, yes"),
+			F("Most likely"),
+			F("Outlook good"),
+			F("Yes"),
+			F("Signs point to yes"),
+			F("Reply hazy try again"),
+			F("Ask again later"),
+			F("Better not tell you now"),
+			F("Cannot predict now"),
+			F("Concentrate and ask again"),
+			F("Don't count on it"),
+			F("My reply is no"),
+			F("My sources say no"),
+			F("Outlook not so good"),
+			F("Very doubtful")
+		};
+		//Serial.print("English randNumber: ");Serial.print(randNumber);Serial.print(" answer: ");Serial.println(engAnswer[randNumber]);
+		msgBoard(engAnswer[randNumber]); 
+	}
+
 }
 
 //EYES Start - based on code from https://github.com/michaltj/LedEyes
